@@ -45,21 +45,13 @@ func setHeaders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Cache-Control", "no-store, must-revalidate")
 	w.Header().Add("Access-Control-Allow-Origin", r.Header.Get("Origin"))
 	w.WriteHeader(204)
-	w.Write([]byte(`0 
- 
-0 
- 
- `))
 }
 
 func checkAliveHandler(w http.ResponseWriter, r *http.Request) {
-
 	setHeaders(w, r)
-
 }
 
 func generateReportHandler(w http.ResponseWriter, r *http.Request) {
-
 	setHeaders(w, r)
 
 	client := &http.Client{}
@@ -92,30 +84,30 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 
 	re := regexp.MustCompile(`https://2.endpointhealth.duosecurity.com/v1/healthapp/device/health\?_req_trace_group=(.*)\?`)
 	results := re.FindSubmatch([]byte(r.URL.Query().Get("eh_service_url")))
-	url := "https://2.endpointhealth.duosecurity.com/v1/healthapp/device/health?_req_trace_group=" + string(results[1]) + "?_=" + strconv.FormatInt(finishedTime.Unix(), 10)
+
+	url := "https://2.endpointhealth.duosecurity.com/v1/healthapp/device/health?_req_trace_group=" +
+		string(results[1]) + "?_=" +
+		strconv.FormatInt(finishedTime.Unix(), 10)
 
 	req, err := http.NewRequest("POST", url, jsonData)
-
 	if err != nil {
-		log.Println("Failed to dump POST request before sending it: ", err)
+		log.Println("Failed to create POST request: ", err)
 	}
 
 	req.Host = "2.endpointhealth.duosecurity.com"
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Connection", "close")
 	req.Header.Set("Accept", "*/*")
-	req.Header.Set("User-Agent", "Duo%20Device%20Health/2.4.0.0 CFNetwork/1125.2 Darwin/19.4.0 (x86_64)")
+	req.Header.Set("User-Agent", "Duo%20Device%20Health/3.4.0.0 CFNetwork/1125.2 Darwin/20.4.0 (x86_64)")
 	req.Header.Set("Accept-Language", "en-au")
 	req.Header.Set("Accept-Encoding", "gzip, deflate")
 
-	fmt.Print("\n\n\n\n")
 	requestDump, err := httputil.DumpRequest(req, true)
-
 	if err != nil {
 		log.Println("Failed to dump POST request before sending it: ", err)
 	}
 
-	fmt.Println(string(requestDump))
+	fmt.Println(string(requestDump), "\n\n ")
 
 	resp, err := client.Do(req)
 	if err != nil {
