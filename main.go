@@ -66,7 +66,7 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 		IsAutoLoginEnabled:        false,
 		Os:                        "macOS",
 		IsEncryptionEnabled:       true,
-		DeviceID:                  "9C903663-DE13-57A7-B81E-FD627AE23F28",
+		DeviceID:                  "DE13DE13-23F28-57A7-B81E-B81E7AE23F28",
 		Txid:                      r.URL.Query().Get("txid"),
 		DeploymentTrack:           "release",
 		IsFirewallEnabled:         true,
