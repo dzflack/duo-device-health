@@ -1,6 +1,6 @@
 ## Duo Device Health
 
-Bypass client-side checks for [Duo Device Health Application](https://duo.com/docs/device-health). Tested on macOS only.
+Bypass client-side checks for [Duo Device Health Application](https://duo.com/docs/device-health).
 
 **WARNING**: Multiple failed attempts will lock out you account. If you fail to auth with 2 consecutive attempts, wait for awhile before you try again. Alternatively reset your failed auth attempts by using another device (i.e. a phone) to successfully auth, and then try again.
 
