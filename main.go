@@ -121,5 +121,5 @@ func main() {
 	http.HandleFunc("/report", generateReportHandler)
 	http.HandleFunc("/alive", checkAliveHandler)
 	log.Println("Listening on port 53106")
-	http.ListenAndServe("127.0.0.1:53106", nil)
+	http.ListenAndServe("127.0.0.1:53105", nil)
 }

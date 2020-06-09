@@ -2,6 +2,10 @@
 
 Bypass client-side checks for [Duo Device Health Application](https://duo.com/docs/device-health). Tested on macOS only.
 
+**WARNING**: Multiple failed attempts will lock out you account. If you fail to auth with 2 consecutive attempts, wait for awhile before you try again. Alternatively reset your failed auth attempts by using another device (i.e. a phone) to successfully auth, and then try again.
+
+**WARNING**: Testing and working on MacOS with Firefox only. 
+
 ### How To
 
 * First make sure actual Duo Device Health app is not running
@@ -29,4 +33,3 @@ go run main.go
 * Use a web browser to login to your DUO protected account
 
 
-**WARNING**: Multiple failed attempts will lock out you account. If you fail to auth with 2 consecutive attempts, wait for awhile before you try again. Alternatively reset your failed auth attempts by using another device (i.e. a phone) to successfully auth, and then try again
