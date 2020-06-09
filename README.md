@@ -30,6 +30,4 @@ go run main.go
 2020/06/09 10:47:29 Listening on port 53106
 ```
 
-* Use a web browser to login to your DUO protected account
-
-
+* Use firefox to login to your DUO protected account
