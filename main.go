@@ -134,18 +134,19 @@ func main() {
 	http.HandleFunc("/alive", checkAliveHandler)
 	tlsCertFile, tlsCertProvided := os.LookupEnv("DUO_LOCAL_TLS_CERT")
 	tlsKeyFile, tlsKeyProvided := os.LookupEnv("DUO_LOCAL_TLS_KEY")
+	log.Println(tlsKeyProvided, tlsKeyFile, tlsCertProvided, tlsCertFile)
 	port := getEnv("DUO_LOCAL_PORT", "53106")
 	host := fmt.Sprintf("127.0.0.1:%s", port)
 	log.Println("Listening on", host)
 	if tlsCertProvided != tlsKeyProvided {
 		log.Fatalln("Please provide neither or both of DUO_LOCAL_TLS_KEY, DUO_LOCAL_TLS_CERT")
 	} else if tlsCertProvided {
-		log.Println("Listening for http")
-		ret := http.ListenAndServe(host, nil)
-		log.Println(ret)
-	} else {
 		log.Println("Listening for https using", tlsCertFile, tlsKeyFile)
 		ret := http.ListenAndServeTLS(host, tlsCertFile, tlsKeyFile, nil)
+		log.Println(ret)
+	} else {
+		log.Println("Listening for http")
+		ret := http.ListenAndServe(host, nil)
 		log.Println(ret)
 	}
 }
