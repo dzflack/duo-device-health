@@ -7,10 +7,20 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"os"
 	"regexp"
 	"strconv"
 	"time"
 )
+
+// Get env var or a default value
+func getEnv(key, defaultVal string) string {
+	value, exists := os.LookupEnv(key)
+	if !exists {
+		value = defaultVal
+	}
+	return value
+}
 
 type healthAppPayload struct {
 	HealthCheckStartTimestamp string        `json:"health_check_start_timestamp"`
@@ -59,6 +69,8 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 	finishedTime := currentTime.Add(time.Second)
 	var agents []interface{}
 
+	deviceId := getEnv("DEVICE_ID", "DE13DE13-23F28-57A7-B81E-B81E7AE23F28")
+
 	body := healthAppPayload{
 		HealthCheckStartTimestamp: currentTime.Format("2006-01-02 15:04:05"),
 		HealthCheckEndTimestamp:   finishedTime.Format("2006-01-02 15:04:05"),
@@ -66,7 +78,7 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 		IsAutoLoginEnabled:        false,
 		Os:                        "macOS",
 		IsEncryptionEnabled:       true,
-		DeviceID:                  "DE13DE13-23F28-57A7-B81E-B81E7AE23F28",
+		DeviceID:                  deviceId,
 		Txid:                      r.URL.Query().Get("txid"),
 		DeploymentTrack:           "release",
 		IsFirewallEnabled:         true,
@@ -120,6 +132,20 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/report", generateReportHandler)
 	http.HandleFunc("/alive", checkAliveHandler)
-	log.Println("Listening on port 53106")
-	http.ListenAndServe("127.0.0.1:53106", nil)
+	tlsCertFile, tlsCertProvided := os.LookupEnv("DUO_LOCAL_TLS_CERT")
+	tlsKeyFile, tlsKeyProvided := os.LookupEnv("DUO_LOCAL_TLS_KEY")
+	port := getEnv("DUO_LOCAL_PORT", "53106")
+	host := fmt.Sprintf("127.0.0.1:%s", port)
+	log.Println("Listening on", host)
+	if tlsCertProvided != tlsKeyProvided {
+		log.Fatalln("Please provide neither or both of DUO_LOCAL_TLS_KEY, DUO_LOCAL_TLS_CERT")
+	} else if tlsCertProvided {
+		log.Println("Listening for http")
+		ret := http.ListenAndServe(host, nil)
+		log.Println(ret)
+	} else {
+		log.Println("Listening for https using", tlsCertFile, tlsKeyFile)
+		ret := http.ListenAndServeTLS(host, tlsCertFile, tlsKeyFile, nil)
+		log.Println(ret)
+	}
 }
