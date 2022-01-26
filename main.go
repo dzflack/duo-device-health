@@ -69,8 +69,6 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 	finishedTime := currentTime.Add(time.Second)
 	var agents []interface{}
 
-	deviceId := getEnv("DEVICE_ID", "DE13DE13-23F28-57A7-B81E-B81E7AE23F28")
-
 	body := healthAppPayload{
 		HealthCheckStartTimestamp: currentTime.Format("2006-01-02 15:04:05"),
 		HealthCheckEndTimestamp:   finishedTime.Format("2006-01-02 15:04:05"),
@@ -78,13 +76,13 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 		IsAutoLoginEnabled:        false,
 		Os:                        "macOS",
 		IsEncryptionEnabled:       true,
-		DeviceID:                  deviceId,
+		DeviceID:                  getEnv("DEVICE_ID", "DE13DE13-23F28-57A7-B81E-B81E7AE23F28"),
 		Txid:                      r.URL.Query().Get("txid"),
 		DeploymentTrack:           "release",
 		IsFirewallEnabled:         true,
 		DuoClientVersion:          "3.4.0.0",
 		OsVersion:                 "11.15.4",
-		DeviceName:                "work-mbp",
+		DeviceName:                getEnv("DEVICE_NAME", "work-mbp"),
 		HealthCheckLengthMillis:   540.57899999999995,
 		OsBuild:                   "20E287",
 		CommunicationScheme:       "https",

@@ -39,3 +39,4 @@ With the use of environment variables, you can modify this program's behaviour:
 * `DUO_LOCAL_TLS_CERT` and `DUO_LOCAL_TLS_KEY` - Specify these as filepaths to a cert and key file. _For use with Chrome, the cert should be signed by a CA (even if the CA is just you), and that CA's cert should be imported as an Authority in your Chrome settings._
 * `DUO_LOCAL_PORT` - Override port on which to listen.
 * `DEVICE_ID` - Override DeviceID in the payload to duosecurity.com.
+* `DEVICE_NAME` - Override DeviceName in the payload to duosecurity.com.
