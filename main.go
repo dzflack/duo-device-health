@@ -92,7 +92,7 @@ func generateReportHandler(w http.ResponseWriter, r *http.Request) {
 	jsonData := new(bytes.Buffer)
 	json.NewEncoder(jsonData).Encode(body)
 
-	re := regexp.MustCompile(`https://2.endpointhealth.duosecurity.com/v1/healthapp/device/health\?_req_trace_group=(.*)\?`)
+	re := regexp.MustCompile(`https://2.endpointhealth.duosecurity.com/v2/healthapp/device/health\?_req_trace_group=(.*)`)
 	results := re.FindSubmatch([]byte(r.URL.Query().Get("eh_service_url")))
 
 	url := "https://2.endpointhealth.duosecurity.com/v1/healthapp/device/health?_req_trace_group=" +
